@@ -1,0 +1,8 @@
+#忽略文件
+node_modules
+dist
+.*
+
+#不忽略文件
+!.gitignore
+!.babelrc

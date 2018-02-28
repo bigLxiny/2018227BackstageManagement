@@ -44,7 +44,7 @@ module.exports = {
 
             // 解析图片字体用的, 以后可能需要修改该配置, 以支持更多的文件类型
             {
-                test: /\.(png|jpg|gif|svg)/,
+                test: /\.(png|jpg|gif|jpeg|svg|woff|ttf)/,
                 use: [{
                     loader: 'url-loader',
                     options: {
@@ -66,8 +66,7 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,  // 我们在main.js入口中导入的第三方包, 不需要解析, 所以这里排除, 好处是提高打包效率
                 loader: 'babel-loader'
-            }
-
+            },
         ]
     },
 

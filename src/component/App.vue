@@ -1,21 +1,12 @@
 <template>
-  <div>
-      {{msg}}
-      <router-view></router-view>
-  </div>
+    <!-- 登陆与后台管理页面互相切换 -->
+    <router-view></router-view>
 </template>
 
 <script>
-export default {
-    data(){
-        return{
-            msg:'这是vue脚手架测试'
-        }
+    export default {
     }
-}
 </script>
 
-<style scoped>
-
+<style scoped> 
 </style>
-

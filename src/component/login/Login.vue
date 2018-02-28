@@ -1,43 +1,106 @@
 <template>
-  <div>
-      {{msg}}
-  <el-button round>圆形按钮</el-button>
-  <el-button type="primary" round>主要按钮</el-button>
-  <el-button type="success" round>成功按钮</el-button>
-  <el-button type="info" round>信息按钮</el-button>
-  <el-button type="warning" round>警告按钮</el-button>
-  <el-button type="danger" round>危险按钮</el-button>
+    <div class="login">
+        <!-- 居中的模态框 -->
+        <section>
+            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="Form" label-width="100px" class="demo-ruleForm">
+                <el-form-item prop="userName">
+                    账号
+                    <el-input type="text" v-model="ruleForm2.uname" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="" prop="password">
+                    密码：
+                    <el-input type="password" v-model="ruleForm2.upwd" auto-complete="off"></el-input>
+                </el-form-item>
 
-  <button @click="login">登陆</button>
-        <button @click="isLogin">登陆检测</button>
-  </div>
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('Form')">登录</el-button>
+                    <el-button @click="resetForm('Form')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </section>
+    </div>
 </template>
 
 
 <script>
-    export default {
-        data() {
-            return {
-                user: {
-                    uname: "admin",
-                    upwd: "123456"
-                },
-                msg:'这是登录页面'
-            };
-        },
+export default {
+  data() {
+    return {
+      ruleForm2: {
+        upwd: "",
+        uname: ""
+      },
+      //   user: {
+      //     uname: "admin",
+      //     upwd: "123456"
+      //   },
+      //添加校验规则
+      rules2: {
+        uname: [
+          { required: true, message: "请输入用户名", trigger: "blur" }
+        ],
+        upwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
+      }
+    };
+  },
 
-        methods: {
-            // 登陆
-            login() {
-                this.$http.post(this.$api.login, this.user)
-                    .then(rsp => alert(rsp.data.message.realname));
-            },
+  methods: {
+    //   登录方法
+    login() {
+      //   this.$http.post(this.$api.login, this.user).then(rsp => alert(rsp.data.message.realname));
 
-            // 判断是否已登陆
-            isLogin() {
-                this.$http.get(this.$api.islogin)
-                    .then(rsp => alert(rsp.data.code));
-            }
+      // console.log(this.ruleForm2);
+      this.$http.post(this.$api.login, this.ruleForm2).then(res => {
+        //   console.log(res);
+        if (res.data.status == 0) {
+        //   this.$alert("登陆成功");
+        //登录成功跳转
+            this.$alert('登录成功','提示',{
+               callback: ()=>{
+                //    保存用户信息
+                   localStorage.setItem('uname', res.data.message.uname);
+                //路由跳转
+                this.$router.push({name:'admin'})
+                }
+            })
+        } else {
+          this.$alert(res.data.message);
         }
+      });
+    },
+    //点击登录按钮登录处理
+    //  this.$refs用来获取页面中的元素或组件, 这里通过它拿到form表单组件, 调用validate方法, 给所有表单进行校验
+    submitForm(Form) {
+      this.$refs[Form].validate(valid => {
+        if (valid) {
+          this.login();
+        } else {
+          this.$alert("账号或密码不合格!");
+        }
+      });
+    },
+
+    //重置按钮处理
+    resetForm(Form) {
+      this.$refs[Form].resetFields();
     }
+  }
+};
 </script>
+<style scoped lang='less'>
+.login {
+  height: 100%;
+  background-color: rgb(58, 96, 153);
+  section {
+    width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    padding-right: 100px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid #fff;
+    border-radius: 10px;
+  }
+}
+</style>

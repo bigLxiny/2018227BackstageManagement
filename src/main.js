@@ -21,7 +21,7 @@ axios.defaults.withCredentials=true;
 Vue.prototype.$http=axios;
 Vue.prototype.$api=api;
 
-
+import './less/index.less'
 Vue.use(ElementUI)
 
 new Vue({

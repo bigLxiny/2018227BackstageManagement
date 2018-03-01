@@ -1,6 +1,6 @@
 <template>
   <div>
-      公共左侧组件
+      公共左侧组件aaa
   </div>
 </template>
 

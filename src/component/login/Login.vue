@@ -4,11 +4,11 @@
         <section>
             <el-form :model="ruleForm2" status-icon :rules="rules2" ref="Form" label-width="100px" class="demo-ruleForm">
                 <el-form-item prop="userName">
-                    账号
+                    账号:
                     <el-input type="text" v-model="ruleForm2.uname" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="" prop="password">
-                    密码：
+                    密码:
                     <el-input type="password" v-model="ruleForm2.upwd" auto-complete="off"></el-input>
                 </el-form-item>
 
@@ -18,6 +18,7 @@
                 </el-form-item>
             </el-form>
         </section>
+        
     </div>
 </template>
 
@@ -39,7 +40,9 @@ export default {
         uname: [
           { required: true, message: "请输入用户名", trigger: "blur" }
         ],
-        upwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        upwd: [
+          { required: true, message: "请输入密码", trigger: "blur" }
+          ]
       }
     };
   },
@@ -70,8 +73,8 @@ export default {
     },
     //点击登录按钮登录处理
     //  this.$refs用来获取页面中的元素或组件, 这里通过它拿到form表单组件, 调用validate方法, 给所有表单进行校验
-    submitForm(Form) {
-      this.$refs[Form].validate(valid => {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.login();
         } else {
@@ -81,8 +84,8 @@ export default {
     },
 
     //重置按钮处理
-    resetForm(Form) {
-      this.$refs[Form].resetFields();
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   }
 };

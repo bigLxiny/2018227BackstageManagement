@@ -18,17 +18,34 @@
       </div>
     </section>
 
-    <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%">
+    <div class="login_table">
+      <!-- 表格 -->
+    <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" height="400px">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column label="日期" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column label="标题" width="300">
+        <template slot-scope="scope">
+          <router-link style="color:#666" :to="{name :'goodsDetail'}">{{scope.row.title}}</router-link>
+        </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" width="120">
+      <!-- prop设置显示对象中的字段名 -->
+      <el-table-column prop="categoryname" label="所属类别">
       </el-table-column>
-      <el-table-column prop="address" label="地址" show-overflow-tooltip>
+      <el-table-column prop="stock_quantity" label="库存" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="market_price" label="市场价" show-overflow-tooltip> </el-table-column>
+      <el-table-column prop="sell_price" label="销售价" show-overflow-tooltip> </el-table-column>
+      <el-table-column label="属性" show-overflow-tooltip>
+        <template slot-scope="scope">
+          三个图标
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="120" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <router-link style="color: #666;" :to="{ name: 'goodsDetail' }">修改</router-link>
+        </template>
       </el-table-column>
     </el-table>
+    </div>
   </div>
 </template>
 
@@ -41,41 +58,30 @@ export default {
           date: "2016-05-03",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-08",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-06",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-07",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
         }
       ],
       multipleSelection: []
     };
   },
+  methods: {
+    getGoodsData() {
+      console.log(123);
+      this.$http
+        .get(this.$api.gsList + "?pageIndex=1&pageSize=10")
+        .then(res => {
+          if (res.data.status == 0) {
+            // 把请求回来的数据将原数据覆盖
+
+            this.tableData3 = res.data.message;
+          }
+        });
+    },
+    
+  },
+  // 生命周期函数，created，在实例创建完成后被立即调用
+    created() {
+            this.getGoodsData();
+        }
 };
 </script>
 
@@ -87,6 +93,9 @@ export default {
   .list_btns_right {
     float: right;
     width: 200px;
+  }
+  .login_table{
+    margin-top: 10px;
   }
 }
 </style>

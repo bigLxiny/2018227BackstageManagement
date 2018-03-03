@@ -12,9 +12,20 @@
         <el-input v-model="form.title"></el-input>
       </el-form-item>
       <el-form-item label="副标题">
-        <el-select v-model="form.sub_title" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+                <el-input v-model="form.sub_title"></el-input>
+            </el-form-item>
+      <el-form-item label="所属类别">
+        <el-select v-model="form.category_id" placeholder="请选择">
+          <!-- <el-option label="区域一" value="shanghai"></el-option> -->
+          <el-option v-for="item in category" :key="item.category_id" :label="item.title" :value="item.category_id">
+            <!-- option里面可以加标签覆盖label文本, 但是label属性还得必须要, 不然会报错 -->
+            <span>
+              <!-- 子级分类才有这个图标 -->
+              <span v-if="item.class_layer != 1">|-</span>
+              <span>{{ item.title }}</span>
+
+            </span>
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="是否发布">
@@ -66,6 +77,10 @@ export default {
   data() {
     return {
       form: {},
+
+      //分类数据
+      category: [],
+
       //从url里面拿到被编辑的商品id
       id: this.$route.params.id
     };
@@ -77,6 +92,18 @@ export default {
         // console.log(res);
         if (res.data.status == 0) {
           this.form = res.data.message;
+
+          // 为了让分类列表默认正确显示, 把商品category_id的数据类型改为number
+          this.form.category_id = +this.form.category_id;
+        }
+      });
+    },
+    // 获取分类
+    getCategory() {
+      this.$http.get(this.$api.ctList + "goods").then(res => {
+        if (res.data.status == 0) {
+          // console.log(res.data.message);
+          this.category = res.data.message;
         }
       });
     },
@@ -87,7 +114,9 @@ export default {
   },
   // 在实例创建完成后被立即调用
   created() {
+    // console.log(this);
     this.getGoods();
+    this.getCategory();
   }
 };
 </script>

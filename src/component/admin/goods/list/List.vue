@@ -13,7 +13,9 @@
       <el-button plain size="mini" icon="el-icon-close" type="info">删除</el-button>
 
       <div class="list_btns_right">
-        <el-input placeholder="请输入商品名称" prefix-icon="el-icon-search" label-width="200px" size="mini">
+        <el-input placeholder="请输入商品名称" prefix-icon="el-icon-search" 
+        label-width="200px" size="mini" v-model="apiQuery.searchvalue" @blur="search">
+        <!-- 绑定收缩数据的值，@blur='search'是指失去焦点的时候调用search()函数 -->
         </el-input>
       </div>
     </section>
@@ -53,6 +55,12 @@
 export default {
   data() {
     return {
+      apiQuery:{
+        searchvalue:'',
+        pageIndex:1,
+        pageSize:10,
+
+      },
       tableData3: [
         {
           date: "2016-05-03",
@@ -64,10 +72,15 @@ export default {
     };
   },
   methods: {
+    search(){
+      this.getGoodsData();
+    },
+
     getGoodsData() {
-      console.log(123);
-      this.$http
-        .get(this.$api.gsList + "?pageIndex=1&pageSize=10")
+      // console.log(123);
+      console.log(this.apiQuery.searchValue);
+      let api=`${this.$api.gsList}?pageIndex=${this.apiQuery.pageIndex}&pageSize=${this.apiQuery.pageSize}&searchvalue=${this.apiQuery.searchvalue}`
+      this.$http.get(api)
         .then(res => {
           if (res.data.status == 0) {
             // 把请求回来的数据将原数据覆盖

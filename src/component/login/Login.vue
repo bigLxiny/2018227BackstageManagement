@@ -1,25 +1,25 @@
 <template>
-    <div class="login">
-        <!-- 居中的模态框 -->
-        <section>
-            <el-form :model="ruleForm2" status-icon :rules="rules2" ref="Form" label-width="100px" class="demo-ruleForm">
-                <el-form-item prop="userName">
-                    账号:
-                    <el-input type="text" v-model="ruleForm2.uname" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="" prop="password">
-                    密码:
-                    <el-input type="password" v-model="ruleForm2.upwd" auto-complete="off"></el-input>
-                </el-form-item>
+  <div class="login">
+    <!-- 居中的模态框 -->
+    <section>
+      <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="" prop="uname">
+          账号:
+          <el-input type="text" v-model="ruleForm2.uname" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="upwd">
+          密码:
+          <el-input type="password" v-model="ruleForm2.upwd" auto-complete="off"></el-input>
+        </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('Form')">登录</el-button>
-                    <el-button @click="resetForm('Form')">重置</el-button>
-                </el-form-item>
-            </el-form>
-        </section>
-        
-    </div>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
+          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </section>
+
+  </div>
 </template>
 
 
@@ -31,18 +31,10 @@ export default {
         upwd: "",
         uname: ""
       },
-      //   user: {
-      //     uname: "admin",
-      //     upwd: "123456"
-      //   },
       //添加校验规则
       rules2: {
-        uname: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
-        ],
-        upwd: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-          ]
+        uname: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        upwd: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
   },
@@ -56,16 +48,16 @@ export default {
       this.$http.post(this.$api.login, this.ruleForm2).then(res => {
         //   console.log(res);
         if (res.data.status == 0) {
-        //   this.$alert("登陆成功");
-        //登录成功跳转
-            this.$alert('登录成功','提示',{
-               callback: ()=>{
-                //    保存用户信息
-                   localStorage.setItem('uname', res.data.message.uname);
-                //路由跳转
-                this.$router.push({name:'admin'})
-                }
-            })
+          //   this.$alert("登陆成功");
+          //登录成功跳转
+          this.$alert("登录成功", "提示", {
+            callback: () => {
+              //    保存用户信息
+              localStorage.setItem("uname", res.data.message.uname);
+              //路由跳转
+              this.$router.push({ name: "admin" });
+            }
+          });
         } else {
           this.$alert(res.data.message);
         }

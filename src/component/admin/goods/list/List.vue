@@ -21,7 +21,7 @@
 
     <div class="login_table">
       <!-- 表格 -->
-      <el-table @selection-change="change" ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" height="400px">
+      <el-table @selection-change="change" ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" height="440px">
         <el-table-column type="selection" width="55">
         </el-table-column>
         <el-table-column label="标题" width="300">
@@ -175,6 +175,7 @@ export default {
   }
   .login_table {
     margin-top: 10px;
+    margin-bottom: 10px;
   }
   // 添加icon点亮的样式
   [class^="el-icon"].active {

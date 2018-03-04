@@ -9,11 +9,11 @@
     <!-- form表单 -->
     <el-form ref="form" label-position="left" :model="form" label-width="80px" class="detail_form">
       <el-form-item label="内容标题">
-        <el-input v-model="form.title"></el-input>
+        <el-input v-model="form.title" autofocus="autofocus"></el-input>
       </el-form-item>
       <el-form-item label="副标题">
-                <el-input v-model="form.sub_title"></el-input>
-            </el-form-item>
+        <el-input v-model="form.sub_title"></el-input>
+      </el-form-item>
       <el-form-item label="所属类别">
         <el-select v-model="form.category_id" placeholder="请选择">
           <!-- <el-option label="区域一" value="shanghai"></el-option> -->
@@ -36,12 +36,20 @@
         <el-switch v-model="form.is_top" active-text="置顶"></el-switch>
         <el-switch v-model="form.is_hot" active-text="推荐"></el-switch>
       </el-form-item>
+
       <el-form-item label="上传封面">
-        <el-input v-model="form.a">form.imgList</el-input>
+        <el-upload class="upload-demo" action="http://localhost:8899/admin/article/uploadimg" :file-list="form.imgList" list-type="picture" :on-success="uploadImg">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
       </el-form-item>
+
       <el-form-item label="上传附件">
-        <el-input v-model="form.a">form.fileList</el-input>
+        <el-upload class="upload-demo" action="http://localhost:8899/admin/article/uploadfile" :file-list="form.fileList" :on-success="uploadFile" 
+        :on-remove="handleRemove" :before-remove="beforeRemove">
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
       </el-form-item>
+
       <el-form-item label="商品货号">
         <el-input v-model="form.goods_no"></el-input>
       </el-form-item>
@@ -57,7 +65,7 @@
       <el-form-item label="内容摘要">
         <el-input type="textarea" v-model="form.zhaiyao"></el-input>
       </el-form-item>
-      <el-form-item label="详细内容">
+      <el-form-item label="详细内容" class="el-form-item-content">
         <quill-editor v-model="form.content"></quill-editor>
       </el-form-item>
       <el-form-item>
@@ -86,6 +94,13 @@ export default {
     };
   },
   methods: {
+    handleRemove(file, fileList) {
+        // console.log(file, fileList);
+        this.form.fileList=fileList;
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
     //根据id获取商品数据
     getGoods() {
       this.$http.get(this.$api.gsDetail + this.id).then(res => {
@@ -107,7 +122,20 @@ export default {
         }
       });
     },
-    onSubmit() {}
+    // 上传封面 => 后端接口, 只能接收一张封面
+    uploadImg(data) {
+      this.form.imgList = [data];
+    },
+    uploadFile(data) {
+      this.form.fileList.push(data);
+    },
+    onSubmit() {
+      this.$http.post(this.$api.gsEdit + this.id, this.form).then(res => {
+        if (res.data.status == 0) {
+          this.$alert("数据修改成功");
+        }
+      });
+    }
   },
   components: {
     quillEditor
@@ -126,6 +154,13 @@ export default {
   &_form {
     margin-top: 30px;
     width: 800px;
+    .el-form-item-content{
+      height: 500px;
+      .quill-editor{
+      height: 400px;
+    }
+    }
+    
   }
 }
 </style>

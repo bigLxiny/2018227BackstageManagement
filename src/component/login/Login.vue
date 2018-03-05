@@ -55,7 +55,10 @@ export default {
               //    保存用户信息
               localStorage.setItem("uname", res.data.message.uname);
               //路由跳转
-              this.$router.push({ name: "admin" });
+              // this.$router.push({ name: "admin" });
+              let nextPage=this.$route.query.next || '/admin'
+              this.$router.push({ path: nextPage });
+              
             }
           });
         } else {

@@ -50,7 +50,9 @@ router.beforeEach((to, from, next) => {
             if(islogin){
                 next()
             }else{
-                next({name:'login'})
+                // next({name:'login'})
+                // query用来设置url中的查询字符串, 我们这里把用户要访问的页面地址通过query记录下来
+                next({ name: 'login', query: { next: to.fullPath}})
             }
         }
     })
